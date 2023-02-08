@@ -1,4 +1,6 @@
 import {Router} from 'express'
+import {getAllGames, insertNewGame} from '../controllers/gamesController.js'
+
 
 const gameRoutes = Router()
 

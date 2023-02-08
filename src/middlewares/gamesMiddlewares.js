@@ -3,7 +3,7 @@ import { db } from "../config/database.js"
 export async function checkGameValues(req, res, next) {
     const {name, image, stockTotal, pricePerDay} = req.body
    
-    if(stockTotal <= 0 || pricePerDay <=0) return res.sendStatus(400)
+    if(!name || stockTotal <= 0 || pricePerDay <=0) return res.sendStatus(400)
     
    
     try {

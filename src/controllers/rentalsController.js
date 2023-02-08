@@ -16,7 +16,7 @@ export async function addNewRental(req, res) {
         const game = gameData.rows[0]
 
         const originalPrice = Number(gameData.rows[0].pricePerDay * daysRented)
-        await db.query(`INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented","returnDate","originalPrice","delayFee") VALUES ('${customerId}', '${gameId}', '${today.format('YYYY-MM-DD')}','${daysRented}', null,${originalPrice}, ${0} )`)
+        await db.query(`INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented","returnDate","originalPrice","delayFee") VALUES ('${customerId}', '${gameId}', '${today.format('YYYY-MM-DD')}','${daysRented}', null,${originalPrice}, null )`)
         res.send(201)
     } catch (error) {
         res.status(500).send(error.message)

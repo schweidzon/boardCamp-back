@@ -9,12 +9,33 @@ export async function getAllCustomers(req, res) {
     }
 }
 
+export async function getCustomersById(req, res) {
+    const {id} = req.params
+    try {
+        const user = await  db.query(`SELECT * FROM customers WHERE id = '${id}'`)
+        res.send(user.rows[0])
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+
+}
+
 export async function addNewCustomer(req, res) {
     const {name, phone, cpf, birthday} = req.body
     try {
         await db.query(`INSERT INTO customers (name, phone, cpf, birthday) VALUES ('${name}', '${phone}', '${cpf}', '${birthday}')`)
         res.send(201)
     } catch (error) {
-        
+        res.status(500).send(error.message)
+    }
+}
+
+export async function updateCustomer(req, res) {
+    const {name, phone, cpf, birthday} = req.body
+    const {id} = req.params
+    try {
+        await db.query(`UPDATE customers SET name='${name}', phone='${phone}',cpf='${cpf}',birthday='${birthday}'`)
+    } catch (error) {
+        res.status(500).send(error.message)
     }
 }

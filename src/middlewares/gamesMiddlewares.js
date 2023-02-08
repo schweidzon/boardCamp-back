@@ -8,11 +8,10 @@ export async function checkGameValues(req, res, next) {
    
     try {
         const gameExist = await db.query(`SELECT * FROM games WHERE name = '${name}' limit 1`)
-        if(gameExist.rows[0]) return res.sendStatus(409)
-        console.log('1', gameExist.rows[0])
+        if(gameExist.rows[0]) return res.sendStatus(409)      
         next()
         
     } catch (error) {
-        
+        res.status(500).send(error.message)
     }
 }

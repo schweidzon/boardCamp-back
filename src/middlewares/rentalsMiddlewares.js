@@ -2,13 +2,14 @@ import { db } from "../config/database.js"
 
 export async function checkRentalValues(req, res, next) {
     const { customerId, gameId, daysRented } = req.body
+    if(isNaN(customerId) ||isNaN(gameId) )  return res.sendStatus(400)
 
     try {
         const isCustomerIdValid = await db.query(`SELECT * FROM customers WHERE id = '${customerId}'`)
         const isGameIdValid = await db.query(`SELECT * FROM games WHERE id = '${gameId}'`)
-        console.log(isGameIdValid.rows[0])
+        if(!isGameIdValid.rows[0]) return res.senStatus(400)
 
-        if (!isCustomerIdValid.rows[0] || !isGameIdValid.rows[0] || daysRented < 0 || isGameIdValid.rows[0].stockTotal <= 0 ) return res.sendStatus(400)
+        if (!isCustomerIdValid.rows[0] || !isGameIdValid.rows[0] || daysRented <= 0 || isGameIdValid.rows[0].stockTotal <= 0 ) return res.sendStatus(400)
 
         next()
     } catch (error) {

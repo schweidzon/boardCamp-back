@@ -75,7 +75,7 @@ export async function returnRental(req, res) {
     }
 }
 
-export async function deleteRental(req, res) {
+export async function deleteRental(req, res, next) {
     const {id} = req.params
     try {
         const rental = await db.query(`SELECT * FROM rentals WHERE id = '${id}'`)

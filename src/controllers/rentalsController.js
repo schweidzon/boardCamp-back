@@ -75,3 +75,18 @@ export async function returnRental(req, res) {
     }
 }
 
+export async function deleteRental(req, res) {
+    const {id} = req.params
+    try {
+        const rental = await db.query(`SELECT * FROM rentals WHERE id = '${id}'`)
+        if(!rental.rows[0]) return res.sendStatus(404)
+        if(rental.rows[0].rentDate === null)return res.sendStatus(400)
+        await db.query(`DELETE FROM rentals WHERE id = '${id}'`)
+        next()
+        
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+
+}
+

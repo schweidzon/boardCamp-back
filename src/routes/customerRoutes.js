@@ -7,6 +7,6 @@ const customersRoutes = Router()
 customersRoutes.get("/customers", getAllCustomers)
 customersRoutes.get("/customers/:id", getCustomersById)
 customersRoutes.post("/customers", checkCustomerValue,addNewCustomer)
-customersRoutes.put("/customers/:id",checkCustomerValue,updateCustomer)
+customersRoutes.put("/customers/:id",updateCustomer)
 
 export default customersRoutes

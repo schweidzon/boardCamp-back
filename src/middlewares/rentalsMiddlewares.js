@@ -22,6 +22,7 @@ export async function checkRental(req, res ,next) {
         const rental = await db.query(`SELECT * FROM rentals WHERE id = '${id}'`)
         if(rental.rows[0].returnDate !== null) return res.sendStatus(400)
         if(!rental.rows[0]) return res.sendStatus(404)
+        next()
     } catch (error) {
         res.status(500).send(error.message)
     }

@@ -1,6 +1,6 @@
 import joi from 'joi'
 
-const rentalSchema = joi.object({
+export const rentalSchema = joi.object({
     customerId: joi.number().required(),
     gameId: joi.number().required(),
     rentDate: joi.string().pattern(/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/).required(),   

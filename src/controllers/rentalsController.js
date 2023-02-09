@@ -10,13 +10,14 @@ export async function addNewRental(req, res) {
     const test = { customerId, gameId }
     
 
-    res.locals.session = test
     try {
         const gameData = await db.query(`SELECT * FROM games WHERE id = ${gameId}`)
-        const game = gameData.rows[0]
+        const stock = gameData.rows[0].stockTotal
+      
 
         const originalPrice = Number(gameData.rows[0].pricePerDay * daysRented)
         await db.query(`INSERT INTO rentals ("customerId", "gameId", "rentDate", "daysRented","returnDate","originalPrice","delayFee") VALUES ('${customerId}', '${gameId}', '${today.format('YYYY-MM-DD')}','${daysRented}', null,${originalPrice}, null )`)
+        await db.query(`UPDATE games SET "stockTotal" = ${stock - 1} WHERE id = ${gameId}`)
         res.send(201)
     } catch (error) {
         res.status(500).send(error.message)

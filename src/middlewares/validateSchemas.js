@@ -5,7 +5,7 @@ export default function validateSchema(schema) {
             const erros = validateUser.error.details.map((err) => {
                 return err.message
             })
-            return res.status(422).send(erros)
+            return res.status(400).send(erros)
         }
         next()
 

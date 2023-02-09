@@ -37,6 +37,7 @@ export async function updateCustomer(req, res) {
     const {id} = req.params
     try {
         await db.query(`UPDATE customers SET name='${name}', phone='${phone}',cpf='${cpf}',birthday='${birthday}'`)
+        res.send()
     } catch (error) {
         res.status(500).send(error.message)
     }

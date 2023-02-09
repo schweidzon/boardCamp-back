@@ -28,15 +28,7 @@ export async function getAllRentals(req, res) {
 
 
     try {
-        // const rentals = await db.query("SELECT * FROM rentals")
-        // const resp = await Promise.all(rentals.rows.map(async (rental) => {
-
-        //     const customer = await db.query(`SELECT * FROM customers where id = '${rental.customerId}'`)
-
-        //     const game = await db.query(`SELECT * FROM games where id = '${rental.gameId}'`)
-        //     return { ...rental, customer: { id: customer.rows[0].id, name: customer.rows[0].name }, game: { id: game.rows[0].id, name: game.rows[0].name } }
-        // }))
-
+        
         const rentals = await db.query(`
         SELECT rentals.*, 
         json_build_object('id', customers.id, 'name', customers.name) AS customer,
@@ -47,8 +39,13 @@ export async function getAllRentals(req, res) {
         `
         )
 
-        
-
+        // SELECT rentals.*, => Seleciona todas as colunas da tabela rentals
+        // json_build_object('id', customers.id, 'name', customers.name) AS customer, => cria um objecto JSON da tabela customers e chama de customer 
+        // json_build_object('id', games.id, 'name', games.name) AS game=> cria um objecto JSON da tabela games e chama de game 
+        // FROM rentals
+        // JOIN customers ON rentals."customerId" = customers.id => Junta, de acordo com as condições que fizemos em cima, a tabela customers na de rentals
+        // JOIN games ON rentals."gameId" = games.id => Junta, de acordo com as condições que fizemos em cima, a tabela games na de rentals
+        // `
 
         res.send(rentals.rows)
     } catch (error) {

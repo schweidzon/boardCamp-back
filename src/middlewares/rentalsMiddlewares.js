@@ -7,10 +7,11 @@ export async function checkRentalValues(req, res, next) {
     try {
         const isCustomerIdValid = await db.query(`SELECT * FROM customers WHERE id = '${customerId}'`)
         const isGameIdValid = await db.query(`SELECT * FROM games WHERE id = '${gameId}'`)
-        console.log(isGameIdValid.rows[0])
-        if(!isGameIdValid.rows[0]) return res.senStatus(400)
+        const checkStock = await db.query(`SELECT * FROM rentals WHERE "gameId" = ${gameId}`)
+        console.log(checkStock.rows.length)
+        if(!isGameIdValid.rows[0]) return res.sendStatus(400)
 
-        if (!isCustomerIdValid.rows[0] || !isGameIdValid.rows[0] || daysRented <= 0 || isGameIdValid.rows[0].stockTotal <= 0 ) return res.sendStatus(400)
+        if (!isCustomerIdValid.rows[0] || !isGameIdValid.rows[0] || daysRented <= 0 || checkStock.rows.length >= isGameIdValid.rows[0].stockTotal ) return res.sendStatus(400)
 
         next()
     } catch (error) {

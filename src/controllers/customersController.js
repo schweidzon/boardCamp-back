@@ -36,9 +36,9 @@ export async function updateCustomer(req, res) {
     const {name, phone, cpf, birthday} = req.body
     const {id} = req.params
     try {
-        const userExist = await db.query(`SELECT * FROM customers WHERE cpf = '${cpf}'`)
-        
-        if(userExist.rows[0]) return res.sendStatus(409)
+        const userExist = await db.query(`SELECT * FROM customers WHERE cpf = $1 AND id<>$2`, [cpf, id])    
+           
+        if(userExist.rowCount !== 0 ) return res.sendStatus(409)
         await db.query(`UPDATE customers SET name='${name}', phone='${phone}',cpf='${cpf}',birthday='${birthday}' WHERE id = ${id}`)
         res.send()
     } catch (error) {

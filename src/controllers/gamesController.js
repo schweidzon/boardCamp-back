@@ -1,8 +1,14 @@
 import {db} from '../config/database.js'
 
 export async function getAllGames(req, res) {
+    const {name} = req.query
+    if(name) {
+       
+        const gamesFilteres = await db.query(`SELECT * FROM games WHERE name ILIKE '${name}%'`)
+        return res.send(gamesFilteres.rows)
+    }
     try {
-        const games = await db.query("SELECT * FROM GAMES")
+        const games = await db.query("SELECT * FROM games")
         res.send(games.rows)
     } catch (error) {
         res.status(500).send(error.message)

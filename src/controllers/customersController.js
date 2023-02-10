@@ -1,6 +1,12 @@
 import { db } from "../config/database.js"
 
 export async function getAllCustomers(req, res) {
+    const {cpf} = req.query
+    if(cpf) {
+       
+        const gamesFilteres = await db.query(`SELECT * FROM games WHERE cpf LIKE '${cpf}%'`)
+        return res.send(gamesFilteres.rows)
+    }
     try {
         const customers = await db.query("SELECT * FROM customers")
         res.send(customers.rows)

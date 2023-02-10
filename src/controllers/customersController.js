@@ -2,12 +2,29 @@ import { db } from "../config/database.js"
 
 export async function getAllCustomers(req, res) {
     const {cpf} = req.query
-    if(cpf) {
-       
-        const gamesFilteres = await db.query(`SELECT * FROM games WHERE cpf LIKE '${cpf}%'`)
-        return res.send(gamesFilteres.rows)
-    }
+    const {offset, limit} =  req.query
+    
+   
     try {
+        if(cpf) {
+       
+            const gamesFilteres = await db.query(`SELECT * FROM customers WHERE cpf LIKE '${cpf}%'`)
+            return res.send(gamesFilteres.rows)
+        }
+        if(offset) {
+            const customers = await db.query(`SELECT * FROM customers OFFSET ${offset}`)
+            return res.send(customers.rows)
+        }
+        if(limit) {
+            const customers = await db.query(`SELECT * FROM customers LIMIT ${offset}`)
+            return res.send(customers.rows)
+
+        }
+        if(offset && limit) {
+            const customers = await db.query(`SELECT * FROM customers LIMIT ${limit} OFFSET ${offset}`)
+            return res.send(customers.rows)
+
+        }
         const customers = await db.query("SELECT * FROM customers")
         res.send(customers.rows)
     } catch (error) {

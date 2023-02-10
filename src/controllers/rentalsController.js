@@ -25,9 +25,82 @@ export async function addNewRental(req, res) {
 }
 
 export async function getAllRentals(req, res) {
-
-
+    const {gameId} = req.query
+    const {customerId} = req.query
+    const {offset, limit} = req.query
+    console.log(gameId)
+    
     try {
+        if(gameId) {
+            const rentals = await db.query(`
+            SELECT rentals.*, 
+            json_build_object('id', customers.id, 'name', customers.name) AS customer,
+            json_build_object('id', games.id, 'name', games.name) AS game
+            FROM rentals
+            JOIN customers ON rentals."customerId" = customers.id
+            JOIN games ON rentals."gameId" = games.id
+            WHERE rentals."gameId" = ${gameId}
+            `
+            )
+    
+            return res.send(rentals.rows)
+    
+        } else if (customerId) {
+            const rentals = await db.query(`
+            SELECT rentals.*, 
+            json_build_object('id', customers.id, 'name', customers.name) AS customer,
+            json_build_object('id', games.id, 'name', games.name) AS game
+            FROM rentals
+            JOIN customers ON rentals."customerId" = customers.id
+            JOIN games ON rentals."gameId" = games.id
+            WHERE rentals."gameId" = ${customerId}
+            `
+            )
+    
+            return res.send(rentals.rows)
+        }
+
+        if(offset) {
+            const rentals = await db.query(`
+            SELECT rentals.*, 
+            json_build_object('id', customers.id, 'name', customers.name) AS customer,
+            json_build_object('id', games.id, 'name', games.name) AS game
+            FROM rentals
+            JOIN customers ON rentals."customerId" = customers.id
+            JOIN games ON rentals."gameId" = games.id
+            OFFSET ${offset}
+            `
+            )
+            return res.send(rentals.rows)
+        }
+        if(limit) {
+            const rentals = await db.query(`
+            SELECT rentals.*, 
+            json_build_object('id', customers.id, 'name', customers.name) AS customer,
+            json_build_object('id', games.id, 'name', games.name) AS game
+            FROM rentals
+            JOIN customers ON rentals."customerId" = customers.id
+            JOIN games ON rentals."gameId" = games.id
+            LIMIT ${limit}
+            `
+            )
+            return res.send(rentals.rows)
+
+        }
+        if(offset && limit) {
+            const rentals = await db.query(`
+            SELECT rentals.*, 
+            json_build_object('id', customers.id, 'name', customers.name) AS customer,
+            json_build_object('id', games.id, 'name', games.name) AS game
+            FROM rentals
+            JOIN customers ON rentals."customerId" = customers.id
+            JOIN games ON rentals."gameId" = games.id
+            LIMIT ${limit} OFFSET ${offset}
+            `
+            )
+            return res.send(rentals.rows)
+
+        }
         
         const rentals = await db.query(`
         SELECT rentals.*, 
